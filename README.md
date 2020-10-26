@@ -68,7 +68,7 @@ Now that we discussed the check pointers, we wanted you to understand what was t
       </p>
       <li>Let's add a neon green material color to our object. Can you observe the glow better?</li>
       <p align = "center">
-         <img src = "https://github.com/sangeetagupta2068/Glowing-Capsule-AR-Effect/blob/main/media/REFERENCE1.png" width="30%" height="30%">
+         <img src = "https://github.com/sangeetagupta2068/Glowing-Capsule-AR-Effect/blob/main/media/Screenshot%202020-10-27%20at%201.59.26%20AM.png" width="30%" height="30%">
       </p>
     </ul> 
  </p> 
@@ -80,7 +80,8 @@ Now that we discussed the check pointers, we wanted you to understand what was t
   <li> Shader Render pass helps us convert our color texture into an image which can be supplied as an input to our original scene render pass. Essentially, what we need to do is supply the output of our Multiply node to the Shader Render pass and the output image of this render pass is passed as the background to our Scene Render pass. You can now see a grey background added to our camera texture.</li>  
   </ul>
 </p> 
- ### 4. Implementing a trail effect to our 3D object :
+
+### 4. Implementing a trail effect to our 3D object :
 <p align = "justify">
   <ul>
     <li> Now it's time to add the final light trail to our glowing capsule object. Let's start by creating a Delay frame object. The Delay frame expects an image as it's first frame which is required to be delayed. So, we need to add a Shadow Render Pass to our final output of the Add node and supply this to the Delay Frame's first frame. Let's add a reciever to display the output of our Delay Frame patch.</li>
@@ -101,6 +102,13 @@ Phew! Finally we are done with the glowing 3D object with a trailing effect. It'
   
   <i> PS - We would be awaiting to see your effects</i>
 </p>
-## Created by : 
-* <a href = "https://github.com/rbkavin"> Kavin Kumar </a>
-* <a href = "https://github.com/sangeetagupta2068/"> Sangeeta Gupta </a>
+
+## Created by :
+<ul>
+  <li>
+  <a href = "https://github.com/rbkavin"> Kavin Kumar </a>
+  </li>
+  <li>
+  <a href = "https://github.com/sangeetagupta2068/"> Sangeeta Gupta </a>
+  </li>
+</ul>  
