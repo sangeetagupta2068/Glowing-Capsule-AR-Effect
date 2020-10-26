@@ -32,32 +32,75 @@ Now that we discussed the check pointers, we wanted you to understand what was t
   </ol>
 </p>
 
-### Creating the basic scene : 
- - Create a Blank Spark AR Studio project -> Import 3D capsule object from the AR library (AR library -> 3D objects -> 3D shapes) -> add asset to the scene -> set scale to 2 x 2 x 1
- - Select Device -> In Render output -> Render pass -> Create Default pipeline
- - This gives us a default structure setup as camera texture and device as input objects connected to the scene render pass which is inturn connected to the scene output. While camera texture helps us capture the live video when someone interacts with our effect is connected to the background property of Scene Render pass, the Device is connected to the scene object which inturn gives us a texture rendered in the screen output.
- - Now, it's possible to have multiple Scene render pass connected to multiple objects for one scene. 
- 
- 
- ### Creating the glow effect : 
- - In order to create luminious effect for our object, we need to overlay our actual capsule object over it's blurred version such that it gives a light emitting effect. Let's do this by creating a patch. 
- - First, let us create a copy of the Scene Render pass in the patch editor. If we drag our capsule from the scene to the patch editor, it's object is created. Let us add this object as the scene object property of our Scene Render pass. We want to create a blurred effect of this object. For this, browser and import the Blur patch from the AR library and import it into assets. Add this Blur asset as an object by dragging it to the patch editor. Connect the newly created Scene render pass's texture to Blur with the Blur amount set as 1. Now, if you connect the Blur patch to Device, you can see a blurred effect of our capsule object is created. 
- - Now, for creating the light emitting effect, we need to overlay our actual capsule object on top of this blurred object. For this, simply create an Add node and supply the Blur patch output as the first value and our initial Scene Render Pass output as the second value. Connect the output of the Add node to the Scene output.
- - Let's add a neon green material color to our capsule object. Can you observe the glow on our capsule ? 
- 
- ### Adding a background shader : 
- - Now, let's make this effect more realistic by adding a light shader in our camera texture. We can achieve this by adding passing our camera texture and a value color to the Multiply node. If you try connecting the output of this node to our original Scene Render pass, you will see it gives an error. This is because, when we supply a color value along with our camera texture to the Multiply node, we get a color as an output. However, Scene render pass expects an image as it's background and scene object to create the texture for our scene output. So, now, how do we add this grey shade to our background then ? Enters Shader Render pass. Shader Render pass helps us convert our color texture into an image which can be supplied as an input to our original scene render pass. Essentially, what we need to do is supply the output of our Multiply node to the Shader Render pass and the output image of this render pass is passed as the background to our Scene Render pass. You can now see a grey background added to our camera texture.
- 
- ### Adding the trail to our capsule : 
-- Now it's time to add the final light trail to our glowing capsule object. Let's start by creating a Delay frame object. The Delay frame expects an image as it's first frame which is required to be delayed. So, we need to add a Shadow Render Pass to our final output of the Add node and supply this to the Delay Frame's first frame. Let's add a reciever to display the output of our Delay Frame patch. We will now have to add a Shader Render pass to our Reciever object. Let's pass this Reciever output object to our scene output. If you observe, nothing is visible on our screen. This is because the Delay Frame expects an input image frame to render and display our Reciever output. Essentially, we want to see the trail while we move and view our object. How do we achieve this? 
-- Here comes the Mix patch. Mix let's us interpolate between our glowing capsule effect and Display Frame Reciever based on the Alpha value supplied. Let's connect our Display Frame Reciever object and Add patch output to the Mix patch and let's supply the output of this patch to our Shader Render pass connected to the main output Scene. You will see if we move our capsule object, there is a trail following it. However, when the user moves, there is a trail following the user movement in the background as well. So, how do we get rid of this?
+### 1. Creating the basic scene :
+<p align = "justify">
+  <ul>
+    <li> Let's start by creating a Blank Spark AR Studio project and import any 3D shapes from the AR library. We are using the capsule object. Feel free to pick any object of your choice and add it to the scene.</li>
+    <p align = "center">
+        <img src = "https://github.com/sangeetagupta2068/Glowing-Capsule-AR-Effect/blob/main/media/Screenshot%202020-10-27%20at%201.10.31%20AM.png" width="80%" height="70%">
+    </p>
+    <li> If you observe, the size of this 3D object is quite small. Let's increase it's scale to 2 x 2 x 1.</li>
+    <li> Now, we need to go to Device and in the Render Output Section, within Render pass, we need select Create for "Default pipeline" for the Scene Render Pass patch. This gives us a default structure setup as Camera Texture and Device input objects connected to the Scene Render Pass patch which is inturn connected to the Scene Output. Scene Render pass exists as a patch and essentially allows us to render our object(s) and their children into the Device scene.</li>
+    <p align = "center">
+        <img src = "https://github.com/sangeetagupta2068/Glowing-Capsule-AR-Effect/blob/main/media/Screenshot%202020-10-27%20at%201.21.05%20AM.png" width="80%" height="70%">
 
-### Adding trail only to the capsule :
-so insted of making the trail in the last we are going to make it before sending it to the blur patch so it has anoter advantage as we use add patch that gives extra glow to the trail patch . so we send the trail to blur and the add it like we did before with the blur . So now the blur will be also happen to the trail of the capsule. 
+<i>Awesome guys! We have now setup our basic scene.</i>
+  </ul>  
+</p>
+ 
+ ### 2. Implementing the glow effect on the 3D object : 
+ <p align = "justify">
+    <ul>
+      <li>Now, in order to create luminious effect for our object, we need to overlay our actual 3D object over it's blurred version such that it gives a light emitting effect. Let's do this by first copying our Scene Render pass patch in the patch editor and removing all it's connectors. This is what we should ideally have.</li>
+       <p align = "center">
+        <img src = "https://github.com/sangeetagupta2068/Glowing-Capsule-AR-Effect/blob/main/media/Screenshot%202020-10-27%20at%201.39.11%20AM.png" width="80%" height="70%">
+      </p>  
+      <li> If we drag out 3D object from the scene to the patch editor, it's object get's created. We now need to connect this object as the Scene Object property of our Scene Render pass.</li>
+      <li> To create the blurred effect of this object, we need to first browser and import the Blur patch from the AR library and import it into our assets. Post this, we need to add this Blur patch asset as an object by dragging it to the patch editor. </li>
+      <li> Now, we need to connect the newly created Scene Render pass's texture to Blur with the Blur amount set as 1. If you connect the Blur patch to Device, you can see a blurred effect of our object is created. </li>
+      <p align = "center">
+        <img src = "https://github.com/sangeetagupta2068/Glowing-Capsule-AR-Effect/blob/main/media/Screenshot%202020-10-27%20at%201.47.43%20AM.png" width="80%" height="70%">
+      </p>
+      <li> Now, for creating the light emitting effect, we need to overlay our actual object on top of this blurred object. For this, simply create an Add patch and supply the Blur patch output as the first value and our initial Scene Render Pass output as the second value. Connect the output of the Add node to the Scene output. This is what we should ideally have.
+      </li>
+      <p align = "center">
+        <img src = "https://github.com/sangeetagupta2068/Glowing-Capsule-AR-Effect/blob/main/media/Screenshot%202020-10-27%20at%201.54.26%20AM.png" width="80%" height="70%">
+      </p>
+      <li>Let's add a neon green material color to our object. Can you observe the glow better?</li>
+      <p align = "center">
+         <img src = "https://github.com/sangeetagupta2068/Glowing-Capsule-AR-Effect/blob/main/media/REFERENCE1.png" width="30%" height="30%">
+      </p>
+    </ul> 
+ </p> 
+ 
+ ### 3. Adding a shader to the Camera Texture :
+ <p align = "justify">
+  <ul>
+    <li> Now, let's make this effect more realistic by adding a light shader in our camera texture. We can achieve this by adding passing our camera texture and a value color to the Multiply patch. If you try connecting the output of this node to our original Scene Render pass, you will see it gives an error. This is because, when we supply a color value along with our camera texture to the Multiply node, we get a color as an output. However, Scene render pass expects an image as it's background and scene object to create the texture for our scene output. So, now, how do we add this grey shade to our background then ? Enters <b>Shader Render pass</b>!</li>
+  <li> Shader Render pass helps us convert our color texture into an image which can be supplied as an input to our original scene render pass. Essentially, what we need to do is supply the output of our Multiply node to the Shader Render pass and the output image of this render pass is passed as the background to our Scene Render pass. You can now see a grey background added to our camera texture.</li>  
+  </ul>
+</p> 
+ ### 4. Implementing a trail effect to our 3D object :
+<p align = "justify">
+  <ul>
+    <li> Now it's time to add the final light trail to our glowing capsule object. Let's start by creating a Delay frame object. The Delay frame expects an image as it's first frame which is required to be delayed. So, we need to add a Shadow Render Pass to our final output of the Add node and supply this to the Delay Frame's first frame. Let's add a reciever to display the output of our Delay Frame patch.</li>
+    <li>We will now have to add a Shader Render pass to our Reciever object. Let's pass this Reciever output object to our scene output. If you observe, nothing is visible on our screen. This is because the Delay Frame expects an input image frame to render and display our Reciever output. Essentially, we want to see the trail while we move and view our object. How do we achieve this?</li>
+    <li>Enters Mix patch! Mix let's us interpolate between our glowing capsule effect and Display Frame Reciever based on the Alpha value supplied. Here, since, we want a slow trailing effect, we set the Alpha as 0.9. Let's connect our Display Frame Reciever object and Add patch output to the Mix patch and let's supply the output of this patch to our Shader Render pass connected to the main output Scene. You will see if we move our capsule object, there is a trail following it. However, when the user moves, there is a trail following the user movement in the background as well. So, how do we get rid of this?</li>
+    <li>The trick here is to send the Delay Frame output to the blur patch so that it not only removes the trail on user movement but also an gives extra glow to the trailing effect. This is what our final patch editor structure would look like</li>
+  </ul>
+</p>  
 
-### Moving the capsule  :
-now we have done the basic mateiral for the glow we can now animate how ever we want . We can make it move it or rotate . This method can be applied to any object and any type of mateiral . Each material will give differnt output. Based on the needes we can change the parametars of the materials. 
-
+## Conclusion and next steps :
+<p align = "justify">
+Phew! Finally we are done with the glowing 3D object with a trailing effect. It's now time for us to add a rotating animation to it! I will leave creating the rotating effect upto you. You have access to the sample code if you get stuck. Do let us know what was your experience in creating the full effect. Wondering what you can do next post this effect ? We have got a few ideas :
+  <ul>
+    <li>Creating a Halo Angel effect</li>
+    <li>Creating glowing Devil horns effect</li>
+    <li>Creating an effect with fireflies</li>
+  </ul>
+  
+  <i> PS - We would be awaiting to see your effects</i>
+</p>
 ## Created by : 
 * <a href = "https://github.com/rbkavin"> Kavin Kumar </a>
 * <a href = "https://github.com/sangeetagupta2068/"> Sangeeta Gupta </a>
