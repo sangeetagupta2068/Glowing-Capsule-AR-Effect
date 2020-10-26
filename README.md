@@ -79,7 +79,7 @@ Now that we discussed the check pointers, we wanted you to understand what was t
     <li> Now, let's make this effect more realistic by adding a light shader in our camera texture. We can achieve this by adding passing our camera texture and a value color to the Multiply patch. If you try connecting the output of this node to our original Scene Render pass, you will see it gives an error. This is because, when we supply a color value along with our camera texture to the Multiply node, we get a color as an output. However, Scene render pass expects an image as it's background and scene object to create the texture for our scene output. So, now, how do we add this grey shade to our background then ? Enters <b>Shader Render pass</b>!</li>
   <li> Shader Render pass helps us convert our color texture into an image which can be supplied as an input to our original scene render pass. Essentially, what we need to do is supply the output of our Multiply node to the Shader Render pass and the output image of this render pass is passed as the background to our Scene Render pass. You can now see a grey background added to our camera texture.</li>
     <p align = "center">
-         <img src = "https://github.com/sangeetagupta2068/Glowing-Capsule-AR-Effect/blob/main/media/Screenshot%202020-10-27%20at%202.30.03%20AM.png" width="30%" height="30%">
+         <img src = "https://github.com/sangeetagupta2068/Glowing-Capsule-AR-Effect/blob/main/media/Screenshot%202020-10-27%20at%202.30.03%20AM.png" width="80%" height="70%">
       </p>
   </ul>
 </p> 
@@ -91,11 +91,11 @@ Now that we discussed the check pointers, we wanted you to understand what was t
     <li>We will now have to add a Shader Render pass to our Reciever object. Let's pass this Reciever output object to our scene output. If you observe, nothing is visible on our screen. This is because the Delay Frame expects an input image frame to render and display our Reciever output. Essentially, we want to see the trail while we move and view our object. How do we achieve this?</li>
     <li>Enters Mix patch! Mix let's us interpolate between our glowing capsule effect and Display Frame Reciever based on the Alpha value supplied. Here, since, we want a slow trailing effect, we set the Alpha as 0.9. Let's connect our Display Frame Reciever object and Add patch output to the Mix patch and let's supply the output of this patch to our Shader Render pass connected to the main output Scene. You will see if we move our capsule object, there is a trail following it. However, when the user moves, there is a trail following the user movement in the background as well. So, how do we get rid of this?</li>
     <p align = "center">
-         <img src = "https://github.com/sangeetagupta2068/Glowing-Capsule-AR-Effect/blob/main/media/Screenshot%202020-10-27%20at%202.29.41%20AM.png" width="30%" height="30%">
+         <img src = "https://github.com/sangeetagupta2068/Glowing-Capsule-AR-Effect/blob/main/media/Screenshot%202020-10-27%20at%202.29.41%20AM.png" width="80%" height="70%">
       </p>
     <li>The trick here is to send the Delay Frame output to the blur patch so that it not only removes the trail on user movement but also an gives extra glow to the trailing effect. This is what our final patch editor structure would look like</li>
     <p align = "center">
-         <img src = "https://github.com/sangeetagupta2068/Glowing-Capsule-AR-Effect/blob/main/media/Screenshot%202020-10-27%20at%202.29.31%20AM.png" width="30%" height="30%">
+         <img src = "https://github.com/sangeetagupta2068/Glowing-Capsule-AR-Effect/blob/main/media/Screenshot%202020-10-27%20at%202.29.31%20AM.png" width="80%" height="70%">
       </p>
   </ul>
 </p>  
