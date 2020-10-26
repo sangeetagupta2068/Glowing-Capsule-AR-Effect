@@ -25,3 +25,7 @@ so insted of making the trail in the last we are going to make it before sending
 
 ### Moving the capsule  :
 now we have done the basic mateiral for the glow we can now animate how ever we want . We can make it move it or rotate . This method can be applied to any object and any type of mateiral . Each material will give differnt output. Based on the needes we can change the parametars of the materials. 
+
+## Created by : 
+* Kavin Kumar
+* Sangeeta Gupta
